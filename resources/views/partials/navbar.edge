@@ -1,0 +1,46 @@
+{{-- <div class="ui grey large menu inverted">
+    <div class="header item">
+        <a href="">Blog</a>
+    </div>
+    <div class="right menu">
+        @if(auth.isAuthenticated) 
+        <div class="ui dropdown item">
+            User : {{ auth.user.username }}
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item">
+                    <a style="color: black;" href="">
+                        Log out
+                    </a>
+                </div>
+            </div>
+        </div>
+        @end
+
+    </div>
+</div> --}}
+
+<div class="ui top fixed menu">
+    <div class="item">
+        <a href="{{route('anime.home')}}">
+            <img src="images/template/Anireviewtop.png" alt="logoAnireview"  style="height: 40px; width: auto;">
+        </a>
+    </div>
+    
+    <div class="right menu">
+      @if(auth.isAuthenticated) 
+        <div class="ui dropdown item">
+            User : {{ auth.user.username }}
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item">
+                    <a style="color: black;" href="{{ route('users.logout') }}">
+                        Log out
+                    </a>
+                </div>
+            </div>
+        </div>
+        @end
+    <a href="" class="item">เข้าสู่ระบบ</a>
+    </div>
+  </div>

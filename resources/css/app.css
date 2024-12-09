@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  background-image: url("/public/images/template/background.png");
+  cursor: url(/public/images/template/cursor/cursor1.gif), auto;
+  animation: cursor 0.2s linear infinite;
+}
+
+@keyframes cursor{
+  0% { 
+      cursor: url(/public/images/template/cursor/cursor1.gif), auto;
+  }
+  50% { 
+      cursor: url(/public/images/template/cursor/cursor2.gif), auto;
+  }
+  100% { 
+      cursor: url(/public/images/template/cursor/cursor3.gif), auto;
+  }
+}

@@ -1,0 +1,14 @@
+{{-- 
+    label   : button label 
+    action  : href 
+--}} 
+<a class="ui button"
+    @if(id)
+        id="{{id}}"
+    @end
+    @if(action) 
+        href="{{action}}"
+    @end
+    >
+    {{label}}
+</a>

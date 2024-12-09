@@ -1,0 +1,63 @@
+@layouts.master({title: "AniReview"})
+
+    <div class="ui fluid container">
+        <img class="ui fluid image" src="images/home/banner.png" alt="banner">
+    </div>
+
+
+    <div class="ui container center aligned">
+        <div class="ui segment">
+            <h3 class="ui header">AniReview</h3>
+            <p>เว็บไซต์สำหรับคนที่อยากจะดูอนิเมะหรือคนที่ไม่เคยดูอนิเมะมาก่อนแล้วอยากดูแต่ไม่รู้จะดูเรื่องอะไรดี ถ้าคุณเป็นอย่างนั้นล่ะก็คุณมาถูกที่แล้ว</p>
+            <p>เว็บไซต์นี้ผู้เขียนได้รีวิวอนิเมะและให้คะแนนแต่ละเรื่องไว้เพื่อประกอบการตัดสินใจในการเลือกดู</p>
+            <p><span class="text-red-400">!!!คำเตือน!!!</span> การรีวิวและคะแนนแต่ละเรื่องมาจากความคิดเห็นของผู้เขียนเท่านั้น ซึ่งอาจมีความคิดที่ไม่ตรงกับคนอื่นๆ เรื่องไหนที่คุณคิดว่าสนุกเรืองนั้นแหละสนุกสำหรับคุณ ☺☺</p>
+        </div>
+    </div>
+    
+    <div class="ui container text-center mt-5">
+        <button class="ui huge green circular icon button ">
+            <i class="plus icon"></i> เพิ่ม
+        </button>
+    </div>
+    
+    <div class="ui container mt-5">
+        <h1 class="ui header">อนิเมะแนะนำ</h1>
+        @each(anime in animeList)
+        <div class="ui divided items segment">
+            <div class="item">
+                <div class="ui small image">
+                    <a href="anime/rezero.html">
+                        <img src="{{ anime.picturePath }}" alt="Re:zero">
+                    </a>
+                </div>
+                <div class="content">
+                    <div class="absolute top-0 right-0 mt-3 mr-3">
+                        <button class="ui icon button" title="Edit">
+                            <i class="edit icon"></i>
+                        </button>
+                        <button class="ui icon button" title="Delete">
+                            <i class="trash icon"></i>
+                        </button>
+                    </div>
+                    
+                    <h2 class="header">
+                        <a href="anime/rezero.html">{{ anime.nameEN }}</a>
+                    </h2>
+                    <br/>
+                    <span class="meta">
+                        <a href="anime/rezero.html">{{ anime.nameTH }}</a>
+                    </span>
+    
+                    <div class="extra flex justify-between">
+                        <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreAdmin }}/10</b> admin</span>
+                        <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreUser }}/10</b> users</span>
+                    </div>
+                    <div class="description">
+                        <p>{{ anime.reviewNoSpoiler }} <a href="anime/rezero.html" class="text-blue-700">อ่านต่อ</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @end
+    </div>
+@end
