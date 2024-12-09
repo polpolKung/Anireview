@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Comment from './comment.js'
 
 export default class Anime extends BaseModel {
   @column({ isPrimary: true })
@@ -34,4 +36,7 @@ export default class Anime extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => Comment)
+  declare comments: HasMany<typeof Comment>
 }

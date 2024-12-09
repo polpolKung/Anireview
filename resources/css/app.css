@@ -4,19 +4,34 @@
 
 
 body {
-  background-image: url("/public/images/template/background.png");
-  cursor: url(/public/images/template/cursor/cursor1.gif), auto;
+  background-image: url("/images/template/background.png");
+  cursor: url(/images/template/cursor/cursor1.gif), auto;
   animation: cursor 0.2s linear infinite;
 }
 
 @keyframes cursor{
   0% { 
-      cursor: url(/public/images/template/cursor/cursor1.gif), auto;
+      cursor: url(/images/template/cursor/cursor1.gif), auto;
   }
   50% { 
-      cursor: url(/public/images/template/cursor/cursor2.gif), auto;
+      cursor: url(/images/template/cursor/cursor2.gif), auto;
   }
   100% { 
-      cursor: url(/public/images/template/cursor/cursor3.gif), auto;
+      cursor: url(/images/template/cursor/cursor3.gif), auto;
   }
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background-color: white;
+  border-radius: 10px; 
+}
+::-webkit-scrollbar-thumb {
+  background-color: orange;
+  border-radius: 10px; 
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: peru;
+} 

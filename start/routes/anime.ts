@@ -8,3 +8,4 @@ router.get('/', ({response}: HttpContext) => {
 })
 
 router.get('/anime', [AnimeController,'index']).as('anime.home')
+router.get('/anime/:id', [AnimeController,'show']).as('anime.show')

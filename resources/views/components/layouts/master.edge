@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel = "icon" href = images/template/icon.png>
+    <link rel = "icon" href = /images/template/icon.png>
     <link rel="stylesheet" type="text/css" href="/semantic/semantic.min.css">
     <script
         src="https:/code.jquery.com/jquery-3.1.1.min.js"
@@ -24,7 +24,7 @@
     @else
         @include('partials/navbar')
     @end
-    <div class="ui container mt-20">
+    <div class="ui container mt-28">
         @flashMessage("message")
         <div class="ui {{$message.type}} message">
             <i class="close icon"></i>
