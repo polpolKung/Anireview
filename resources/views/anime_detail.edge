@@ -12,12 +12,14 @@
     
     <!-- Text Content Section -->
     <div class="eleven wide column">
-      <h2 class="text-3xl font-bold">Re:Zero kara Hajimeru Isekai Seikatsu Season 1</h2>
+      <h2 class="text-3xl font-bold">{{ anime.nameEN}}</h2>
       <div class="text-2xl text-gray-500">
-        รีเซทชีวิต ฝ่าวิกฤตต่างโลก
+        {{ anime.nameTH }}
       </div>
-      
-      <p class="mt-3" style="font-size: 14px;">
+      <div class="mt-3  text-lg w-5/6">
+        {{ anime.description }} 
+      </div>
+      <p class="mt-3 text-sm w-5/6" >
         <span class="ui red label">!!!คำเตือน!!!</span> การรีวิวและคะแนนแต่ละเรื่องมาจากความคิดเห็นของผู้เขียนเท่านั้น ซึ่งอาจมีความคิดที่ไม่ตรงกับคนอื่นๆ เรื่องไหนที่คุณคิดว่าสนุกเรืองนั้นแหละสนุกสำหรับคุณ☺☺
       </p>
     </div>
@@ -28,13 +30,13 @@
     <div class="flex flex-col items-end">
       <span class="p-1 bg-gray-900 rounded-t-xl text-white">admin</span>
       <div class="font-bold p-2 bg-gray-900 rounded-s-xl rounded-b-xl text-center mb-2">
-        <span class="text-yellow-400 text-3xl">9.7/10</span>
+        <span class="text-yellow-400 text-3xl">{{ anime.scoreAdmin }}/10</span>
       </div>
     </div>
     <div class="flex flex-col items-end">
       <span class="p-1 bg-gray-900 rounded-t-xl text-white">user</span>
       <div class="font-bold p-2 bg-gray-900 rounded-s-xl rounded-b-xl text-center mb-2">
-        <span class="text-yellow-400 text-3xl">9.7/10</span>
+        <span class="text-yellow-400 text-3xl">{{ anime.scoreUser }}/10</span>
       </div>
     </div>
   </div>
@@ -43,23 +45,89 @@
 
   <!-- Second Block -->
   <div class="ui segment">
-    <h2 class="ui header">ตัวอย่าง</h2>
-    <iframe width="420" height="345" src="https://www.youtube.com/embed/Slz_rahWp6Y" frameborder="0" allowfullscreen></iframe>
-    <h1 class="ui dividing header">
-      <span class="ui green label">รีวิวแบบไม่สปอยล์</span>
-    </h1>
-    <p>เป็นอนิเมะแนวต่างโลก(แนวต่างโลกก็คือการที่เกิดเหตุการณ์บางอย่างกับตัวเอกทำให้ต้องไปใช้ชีวิตในอีกโลกนึงที่ไม่ใช่โลกมนุษย์ปกติ)ที่เน้นเรื่องของการเล่นกับเวลาและความตาย<br>
-    เป็นอนิเมะเรื่องนึงที่สนุกมากๆ เนื้อเรื่องมีความเข้มข้น พาเราอินไปกับบรรยากาศที่พาไป แต่ถึงเนื้อเรื่องมีความเข้มข้นแต่ก็ยังมีความฮาของตัวพระเอกที่แทรกเข้ามาเพื่อให้บรรยากาศผ่อนคลาย<br>
-    เรื่องของงานภาพถือว่าทำได้สวยเลยทีเดียว ตัวละครแต่ละตัวมีเอกลักษณ์ ไม่ดูถือว่าพลาด<br>
-    สำหรับคนที่ไม่ค่อยได้ดูการ์ตูนหรืออนิเมะเรื่องนี้บางคนอาจจะเข้าไม่ถึง แต่ก็ยังขอแนะนำอยู่ดี ถ้าคุณดูแล้วสนุกก็แสดงว่าคุณเข้าถึงมันแล้วล่ะ เรื่องนี้คิดว่าไม่เหมาะสำหรับเด็กๆมากนัก เพราะมีเรื่องของฉากที่มีความรุนแรงอยู่บ้าง แต่ถ้าเป็นช่วงวัยรุ่นก็ถือว่าผ่าน <span class="ui purple label">อย่างนี้ต้องไปดูแล้วล่ะ~~~~~</span></p>
+    <div class="ui grid">
+      <div class="eight wide column">
+        <h2 class="ui dividing header">ตัวอย่าง</h2>
+        <iframe width="100%" height="345" src="{{ anime.urlTrailer }}" frameborder="0" allowfullscreen></iframe>
+      </div>
+  
+      <div class="eight wide column">
+        <h2 class="ui dividing header">ความคิดเห็น</h2>
+  
+        <form action="/submit-comment" method="POST" class="ui reply form">
+          <div class="fields">
+            <div class="eleven wide field">
+              <textarea rows="2" name="comment" placeholder="แสดงความคิดเห็นของคุณ..."></textarea>
+            </div>
+            <div class="five wide field">
+              <input 
+                type="number" 
+                name="score" 
+                step="0.01" 
+                min="0" 
+                max="10" 
+                placeholder="คะแนน (เต็ม 10)" 
+                class="ui input"
+              >
+            </div>
+          </div>
+          <button type="submit" class="ui blue labeled submit icon button">
+            <i class="icon edit"></i> ส่งความคิดเห็น
+          </button>
+        </form>
 
-    <h1 class="ui dividing header">
-      <span class="ui orange label">รีวิวแบบสปอยล์</span>
+        <div class="ui comments h-56 overflow-y-auto border p-3">
+          @each(comment in anime.$preloaded.comments)
+          <div class="comment">
+            <div class="content">
+              <a class="author">{{comment.$preloaded.user.fullName}}</a>
+              <div class="metadata">
+                <span class="date">{{comment.postedOn}}</span>
+                <span class="score">คะแนน: {{comment.score}}</span>
+              </div>
+              <div class="text">
+                {{comment.comment}}
+              </div>
+            </div>
+          </div>
+          @end
+        </div>
+      </div>
+    </div>
+    
+    <h1 class="ui header">
+      <span class=" bg-green-400 pl-2 pr-2 py-1 rounded-md text-white ">รีวิวแบบไม่สปอยล์</span>
     </h1>
-    <a href="#show" class="ui primary button">อ่าน!!!</a>
-    <a href="#hide" class="ui button">/ ซ่อน</a>
-    <p class="spoileralert">สำหรับคนที่อยากอ่านรีวิวแบบมีสปอย เรื่องนี้เป็นอนิเมะแนวต่างโลก พระเอกจะมีพลังที่ได้จากแม่มดตนหนึ่งเป็นพลังที่ดูโกงมากนั่นคือพลังที่ถ้าตายแล้วจะย้อนเวลากลับไปยังอดีต สรุปคือถ้าตายจะไม่ตายนั่นเอง ตัวพระเอกนั้นไม่ค่อยจะเก่ง พลังที่ได้มาใช่ว่าจะดีสะทีเดียว เพราะว่าเวลาตายก่อนจะย้อนกลับไปในอดีต ก็ต้องรับรู้กับความเจ็บปวดก่อนตาย แถมถ้าบอกเรื่องพลังกับใครแม่มดจะบีบหัวใจจนตายแล้วค่อยย้อนกลับไปในอดีตใหม่ อนิเมะเรื่องนนี้จึงสนุกมากเพราะมีการเล่นกับความรู้สึกของพระเอก การแก้ไขสถานการณ์ต่างๆที่ต้องใช้ความตายในการแก้ปัญหา บางปัญหาก็แก้ไม่ได้ บางปัญหาก็แก้ได้ ต้องลุ้นไปกับเนื้อเรื่องที่นำเสนออกมา แต่ก็ไม่ได้ตึงเครียดทั้งเรื่องมีทั้งตอนที่ผ่อนคลายเช่นกัน เช่นฉากที่พระเอกไล่จีบนางเอก ก็มีโมเม้นแบบนี้ด้วยเหมือนกันในเรื่องนี้ บอกเลยว่าตัวละครผู้หญิงในเรื่องนี้น่ารักมาก <span class="ui pink label">อย่างนี้ต้องไปดูแล้วล่ะ~~~~~</span></p>
+    <hr class="my-2">
+    <p class="text-lg">{{ anime.reviewNoSpoiler }}</p>
+
+    <h1 class="ui header">
+      <span class="bg-orange-400 pl-2 pr-2 py-1 rounded-md text-white">รีวิวแบบสปอยล์</span>
+      <a href="javascript:void(0)" id="toggleReview" class="ui mini primary button">อ่าน!!!</a>
+    </h1>
+    <hr class="my-2">
+    <p id="spoilerContent" class="my-2 text-lg" style="display: none;">
+      {{ anime.reviewSpoiler }}
+    </p>
   </div>
 </div>
 
+<script>
+  $(document).ready(function() {
+    $('#toggleReview').click(function() {
+      var $spoilerContent = $('#spoilerContent');
+      var $button = $('#toggleReview');
+      
+      // Toggle visibility of review spoiler
+      $spoilerContent.toggle();
+
+      // Change button text based on the visibility
+      if ($spoilerContent.is(':visible')) {
+        $button.text('ซ่อน');
+      } else {
+        $button.text('อ่าน!!!');
+      }
+    });
+  });
+</script>
 @end

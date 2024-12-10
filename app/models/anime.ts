@@ -28,6 +28,12 @@ export default class Anime extends BaseModel {
   @column()
   declare picturePath: string
 
+  @column()
+  declare description: string
+
+  @column()
+  declare urlTrailer: string
+
   @column.dateTime({ autoCreate: false })
   declare publishDate: DateTime | null
 

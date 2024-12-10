@@ -18,10 +18,15 @@ export default class AnimeController {
     async show({view, params}: HttpContext) {
         const id = params.id
         const anime = await Anime.query()
-                                    .where('id',id)
-                                    .preload('comments')
-                                    .first()
+                                    .where('id', id)
+                                    .preload('comments', (commentQuery) => {
+                                    commentQuery.preload('user', (userQuery) => {
+                                        userQuery.select('fullName');
+                                    });
+                                    })
+                                    .first();
 
+        
         return view.render('anime_detail', {anime})
     }
 }

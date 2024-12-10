@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
 import Anime from './anime.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
@@ -25,6 +25,11 @@ export default class Comment extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @computed()
+  get postedOn(){
+    return this.createdAt.toFormat("dd LLL yyyy")
+  }
 
   @belongsTo(() => Anime)
   declare anime: BelongsTo<typeof Anime>
