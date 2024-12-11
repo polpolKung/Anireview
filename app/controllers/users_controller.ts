@@ -13,4 +13,10 @@ export default class UsersController {
 
         response.redirect().toRoute('anime.home')
     }
+
+    async logout({auth, response}:HttpContext){
+        await auth.use('web').logout()
+
+        response.redirect().toRoute('users.login')
+    }
 }
