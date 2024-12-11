@@ -29,4 +29,8 @@ export default class AnimeController {
         
         return view.render('anime_detail', {anime})
     }
+
+    async create({view}: HttpContext) {       
+        return view.render('anime_form')
+    }
 }

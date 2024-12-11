@@ -6,7 +6,12 @@ import AnimeController from '#controllers/anime_controller'
 router.get('/', ({response}: HttpContext) => {
     response.redirect().toRoute('anime.home')
 })
+
+router.get('/anime/form', [AnimeController,'create']).as('anime.create').use(middleware.auth())
+
 router.group(()=> {
     router.get('/anime', [AnimeController,'index']).as('anime.home')
     router.get('/anime/:id', [AnimeController,'show']).as('anime.show')
 }).use(middleware.authguest())
+
+
