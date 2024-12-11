@@ -1,0 +1,38 @@
+@layouts.master({title: "Login"})
+    @slot('style')
+    #main {
+        margin: 0;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    @end
+    @!slot('navbar')
+
+    <div class="ui two column grid container border bg-white">
+        <div class="column">
+            <a href="{{route('anime.home')}}">
+                <img class="ui centered image" src="images/home/Anireview.png" alt="logoAnireview">
+            </a>
+        </div>
+
+        <div class="column mt-20 ">
+            <h1 class="ui header">Login</h1>
+            <form class="ui form" action="{{route('users.login')}}" method="post">
+                {{ csrfField() }}
+                <div class="field">
+                    <label>Username</label>
+                    <input name="username">
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" name="password">
+                </div>
+                <input class="ui button" type="submit" value="Login">
+                @!button({action: route('users.login'), label: 'Sing up'}) 
+            </form>
+        </div>
+    </div>
+    @!slot('footer')
+@end

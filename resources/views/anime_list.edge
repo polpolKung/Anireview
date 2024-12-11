@@ -13,13 +13,14 @@
             <p><span class="ui red label">!!!คำเตือน!!!</span> การรีวิวและคะแนนแต่ละเรื่องมาจากความคิดเห็นของผู้เขียนเท่านั้น ซึ่งอาจมีความคิดที่ไม่ตรงกับคนอื่นๆ เรื่องไหนที่คุณคิดว่าสนุกเรืองนั้นแหละสนุกสำหรับคุณ ☺☺</p>
         </div>
     </div>
-    
+    @if(auth.isAuthenticated) 
     <div class="ui container text-center mt-5">
         <button class="ui huge green circular icon button ">
             <i class="plus icon"></i> เพิ่ม
         </button>
     </div>
-    
+    @end
+
     <div class="ui container mt-5">
         <h1 class="ui header">อนิเมะแนะนำ</h1>
         @each(anime in animeList)
@@ -31,6 +32,7 @@
                     </a>
                 </div>
                 <div class="content">
+                    @if(auth.isAuthenticated) 
                     <div class="absolute top-0 right-0 mt-3 mr-3">
                         <button class="ui icon button blue" title="Edit">
                             <i class="edit icon"></i>
@@ -39,7 +41,7 @@
                             <i class="trash icon"></i>
                         </button>
                     </div>
-                    
+                    @end
                     <h2 class="header w-10/12">
                         <a href="anime/rezero.html">{{ anime.nameEN }}</a>
                     </h2>

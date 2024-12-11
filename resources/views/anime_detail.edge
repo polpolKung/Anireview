@@ -2,15 +2,12 @@
 
 
 <div class="ui container mt-5">
-  <!-- First Block -->
  <div class="ui segment">
   <div class="ui grid">
-    <!-- Image Section -->
     <div class="three wide column">
       <img class="ui small image mt-1" src="/images/poster/rezero.png" alt="Re:zero">
     </div>
     
-    <!-- Text Content Section -->
     <div class="eleven wide column">
       <h2 class="text-3xl font-bold">{{ anime.nameEN}}</h2>
       <div class="text-2xl text-gray-500">
@@ -25,8 +22,17 @@
     </div>
   </div>
 
-  <!-- Rating Section -->
   <div class="absolute top-0 right-0 mt-3 mr-3 flex flex-col items-end space-y-4">
+    @if(auth.isAuthenticated) 
+    <div class="lex flex-col items-end">
+      <button class="ui icon button blue" title="Edit">
+          <i class="edit icon"></i>
+      </button>
+      <button class="ui icon button red" title="Delete">
+          <i class="trash icon"></i>
+      </button>
+    </div>
+    @end
     <div class="flex flex-col items-end">
       <span class="p-1 bg-gray-900 rounded-t-xl text-white">admin</span>
       <div class="font-bold p-2 bg-gray-900 rounded-s-xl rounded-b-xl text-center mb-2">
@@ -43,7 +49,6 @@
 </div>
   
 
-  <!-- Second Block -->
   <div class="ui segment">
     <div class="ui grid">
       <div class="eight wide column">
@@ -53,8 +58,9 @@
   
       <div class="eight wide column">
         <h2 class="ui dividing header">ความคิดเห็น</h2>
-  
+        
         <form action="/submit-comment" method="POST" class="ui reply form">
+          {{ csrfField() }}
           <div class="fields">
             <div class="eleven wide field">
               <textarea rows="2" name="comment" placeholder="แสดงความคิดเห็นของคุณ..."></textarea>
@@ -80,7 +86,7 @@
           @each(comment in anime.$preloaded.comments)
           <div class="comment">
             <div class="content">
-              <a class="author">{{comment.$preloaded.user.fullName}}</a>
+              <span class="author">{{comment.$preloaded.user.fullName}}</span>
               <div class="metadata">
                 <span class="date">{{comment.postedOn}}</span>
                 <span class="score">คะแนน: {{comment.score}}</span>
@@ -103,7 +109,7 @@
 
     <h1 class="ui header">
       <span class="bg-orange-400 pl-2 pr-2 py-1 rounded-md text-white">รีวิวแบบสปอยล์</span>
-      <a href="javascript:void(0)" id="toggleReview" class="ui mini primary button">อ่าน!!!</a>
+      <a id="toggleReview" class="ui mini primary button">อ่าน!!!</a>
     </h1>
     <hr class="my-2">
     <p id="spoilerContent" class="my-2 text-lg" style="display: none;">
@@ -118,10 +124,8 @@
       var $spoilerContent = $('#spoilerContent');
       var $button = $('#toggleReview');
       
-      // Toggle visibility of review spoiler
       $spoilerContent.toggle();
 
-      // Change button text based on the visibility
       if ($spoilerContent.is(':visible')) {
         $button.text('ซ่อน');
       } else {

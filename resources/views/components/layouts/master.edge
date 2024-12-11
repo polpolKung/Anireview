@@ -11,20 +11,21 @@
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
     <script src="/semantic/semantic.min.js"></script>
-    {{-- <style>
+    <style>
         @if($slots.style) 
             {{{ await $slots.style()}}}
         @end
-    </style> --}}
+    </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="h-screen flex flex-col">
     @if($slots.navbar)
         {{ await $slots.navbar() }}
     @else
         @include('partials/navbar')
     @end
-    <div class="ui container mt-28">
+    
+    <div class="ui container mt-28" id="main">
         @flashMessage("message")
         <div class="ui {{$message.type}} message">
             <i class="close icon"></i>
@@ -34,6 +35,12 @@
         {{{ await $slots.main() }}}
     </div>
 
+    @if($slots.footer)
+        {{ await $slots.footer() }}
+    @else
+        @include('partials/footer')
+    @end
+
     @if($slots.script) 
         {{{ await $slots.script() }}}
     @end
@@ -42,13 +49,7 @@
         $('.ui.dropdown').dropdown();
         $('.message .close').on('click', function(){
             $(this).closest('.message').transition('fade');
-        })
+        });
     </script>
-
-    @if($slots.bottom)
-    {{ await $slots.navbar() }}
-    @else
-        @include('partials/bottom')
-    @end
 </body>
 </html>
