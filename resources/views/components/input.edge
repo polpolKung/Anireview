@@ -9,8 +9,8 @@
         <label for="{{name}}">{{label}}</label> 
     @end
     @if(type=="submit") 
-        <input id="{{name}}" class="ui button" {{ $props.except(['label']).toAttrs() }}>
+        <input name="{{name}}" class="ui button" {{ $props.except(['label']).toAttrs() }}>
     @else
-        <input id="{{name}}" {{ $props.except(['label']).toAttrs() }}>
+        <input name="{{name}}" {{ $props.except(['label']).toAttrs() }}>
     @end
 </div>

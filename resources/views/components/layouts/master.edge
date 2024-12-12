@@ -24,14 +24,18 @@
     @else
         @include('partials/navbar')
     @end
-    
-    <div class="ui container mt-28" id="main">
-        @flashMessage("message")
-        <div class="ui {{$message.type}} message">
+
+    @flashMessage("message")
+    <div class="absolute top-10  w-full">
+        <div class="ui {{$message.type}} message left-1/2 -translate-x-1/2 text-center max-w-lg">
             <i class="close icon"></i>
             {{$message.message}}
         </div>
-        @end
+    </div>
+    @end
+
+
+    <div class="ui container mt-28" id="main">
         {{{ await $slots.main() }}}
     </div>
 

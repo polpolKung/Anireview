@@ -21,16 +21,12 @@
             <h1 class="ui header">Login</h1>
             <form class="ui form" action="{{route('users.login')}}" method="post">
                 {{ csrfField() }}
-                <div class="field">
-                    <label>Username</label>
-                    <input name="username">
+                @!input({label: 'Username', name:'username'})
+                @!input({label: 'Password', name:'password', type: 'password'})
+                <div class="ui buttons space-x-4">
+                    @!input({name:'login', type: 'submit', value: 'Login'}) 
+                    @!button({action: route('register'), label: 'Sign up'}) 
                 </div>
-                <div class="field">
-                    <label>Password</label>
-                    <input type="password" name="password">
-                </div>
-                <input class="ui button" type="submit" value="Login">
-                @!button({action: route('users.login'), label: 'Sing up'}) 
             </form>
         </div>
     </div>

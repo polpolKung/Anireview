@@ -6,8 +6,8 @@ router.on('/login').render('login').as('login')
 router.post('/login', [UsersController, 'login']).as('users.login').use(middleware.guest())
 router.get('/logout', [UsersController, 'logout']).as('users.logout')
 
-// router.on('/register').render('register').as('register')
-// router.post('/register', [UsersController, 'register']).as('users.register')
+router.on('/register').render('register').as('register')
+router.post('/register', [UsersController, 'register']).as('users.register')
 // router.post('/users/verify', [UsersController, 'verifyUsername']).as('users.verify')
 
 // router.get('/create_user',async ()=>{

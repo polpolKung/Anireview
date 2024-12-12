@@ -1,17 +1,21 @@
 import User from '#models/user'
+import { registerUserValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
     
-    async login({auth, request, response}:HttpContext){
+    async login({auth, request, response, session}:HttpContext){
         const username = request.input('username')
         const password = request.input('password')
+        try {
+            const user = await User.verifyCredentials(username, password);
+            await auth.use('web').login(user);
+            response.redirect().toRoute('anime.home');
+        } catch (error) {
+            session.flash("message",{type: "negative", message:"Username หรือ Password ไม่ถูกต้อง"})
+            response.redirect().back();
+        }
 
-        const user = await User.verifyCredentials(username, password)
-
-        await auth.use('web').login(user)
-
-        response.redirect().toRoute('anime.home')
     }
 
     async logout({auth, response}:HttpContext){
@@ -19,4 +23,19 @@ export default class UsersController {
 
         response.redirect().toRoute('users.login')
     }
+
+    async register({request, response, session}:HttpContext){
+        const playload = await request.validateUsing(registerUserValidator)
+
+        const newUser = new User()
+        newUser.username = playload.username
+        newUser.fullName = playload.fullname
+        newUser.password = playload.password
+
+        await newUser.save()
+        session.flash("message",{type: "positive", message:"ลงทะเบียนสำเร็จ กรุณา login เพื่อเข้าสู่ระบบ"})
+
+        response.redirect().toRoute('login')
+    }
+
 }
