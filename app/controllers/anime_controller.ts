@@ -46,7 +46,7 @@ export default class AnimeController {
         newAnime.nameEN = payload.nameEN
         newAnime.nameTH = payload.nameTH
         newAnime.scoreAdmin = payload.score
-        newAnime.publishDate = payload.publishDate
+        newAnime.publishDate =  DateTime.fromISO(payload.publishDate)
         newAnime.urlTrailer = payload.urlTrailer
         newAnime.reviewNoSpoiler = payload.reviewNoSpoiler
         newAnime.reviewSpoiler = payload.reviewSpoiler
@@ -56,9 +56,14 @@ export default class AnimeController {
             extnames: ['jpg', 'jpeg', 'png'],
         })
 
+
+
         if (picture) {
-            const fileName = `${Date.now()}-${picture.fileName}`
-            const publicDir = path.join(__dirname, '..', '..', 'public', 'images', 'poster')
+            const dir = process.cwd()
+            const publicDir = path.join(dir, 'public', 'images', 'poster')
+            console.log('publicDir', publicDir);
+
+            const fileName = `${Date.now()}-${picture.clientName}.png`
 
             await picture.move(publicDir, {
                 name: fileName,

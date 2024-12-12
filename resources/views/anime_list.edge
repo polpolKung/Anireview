@@ -43,11 +43,11 @@
                     </div>
                     @end
                     <h2 class="header w-10/12">
-                        <a href="anime/rezero.html">{{ anime.nameEN }}</a>
+                        <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameEN }}</a>
                     </h2>
                     <br/>
                     <span class="meta">
-                        <a href="anime/rezero.html">{{ anime.nameTH }}</a>
+                        <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameTH }}</a>
                     </span>
     
                     <div class="extra flex justify-between">
