@@ -21,25 +21,25 @@
             <h1 class="ui header">Sign up</h1>
             <form class="ui form" action="{{route('users.register')}}" method="post">
                 {{ csrfField() }}
-                @!input({label: 'Username', name:'username', value: old('username') || ''})
+                @!input({label: 'Username', name:'username', placeholder: 'เช่น user123',value: old('username') || ''})
                 @inputError('username')
                     @each(message in $messages)
                         <div class="ui negative message">{{ message }}</div>
                     @end
                 @end
-                @!input({label: 'Fullname', name:'fullname', value: old('fullname') || ''})
+                @!input({label: 'Fullname', name:'fullname', placeholder: 'เช่น Chanpol Thippawan', value: old('fullname') || ''})
                 @inputError('fullname')
                     @each(message in $messages)
                         <div class="ui negative message">{{ message }}</div>
                     @end
                 @end
-                @!input({label: 'Password', name:'password', type: 'password'})
+                @!input({label: 'Password', name:'password', type: 'password', placeholder: 'ระบุรหัสผ่าน'})
                 @inputError('password')
                     @each(message in $messages)
                         <div class="ui negative message">{{ message }}</div>
                     @end
                 @end
-                @!input({label: 'Confirm password', name:'password_confirmation', type: 'password'})
+                @!input({label: 'Confirm password', name:'password_confirmation', type: 'password', placeholder: 'ระบุรหัสผ่านให้ตรงกัน'})
                 @inputError('password_confirmation')
                     @each(message in $messages)
                         <div class="ui negative message">{{ message }}</div>

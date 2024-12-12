@@ -19,12 +19,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-screen flex flex-col">
-    @if($slots.navbar)
-        {{ await $slots.navbar() }}
-    @else
-        @include('partials/navbar')
-    @end
-
     @flashMessage("message")
     <div class="absolute top-10  w-full">
         <div class="ui {{$message.type}} message left-1/2 -translate-x-1/2 text-center max-w-lg">
@@ -34,6 +28,11 @@
     </div>
     @end
 
+    @if($slots.navbar)
+        {{ await $slots.navbar() }}
+    @else
+        @include('partials/navbar')
+    @end
 
     <div class="ui container mt-28" id="main">
         {{{ await $slots.main() }}}

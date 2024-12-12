@@ -7,7 +7,10 @@ router.get('/', ({response}: HttpContext) => {
     response.redirect().toRoute('anime.home')
 })
 
-router.get('/anime/form', [AnimeController,'create']).as('anime.create').use(middleware.auth())
+router.group(()=> {
+    router.get('/anime/form', [AnimeController,'create']).as('anime.create')
+    router.post('/anime/form', [AnimeController,'store']).as('anime.store')
+}).use(middleware.auth())
 
 router.group(()=> {
     router.get('/anime', [AnimeController,'index']).as('anime.home')

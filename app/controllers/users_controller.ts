@@ -25,12 +25,12 @@ export default class UsersController {
     }
 
     async register({request, response, session}:HttpContext){
-        const playload = await request.validateUsing(registerUserValidator)
+        const payload = await request.validateUsing(registerUserValidator)
 
         const newUser = new User()
-        newUser.username = playload.username
-        newUser.fullName = playload.fullname
-        newUser.password = playload.password
+        newUser.username = payload.username
+        newUser.fullName = payload.fullname
+        newUser.password = payload.password
 
         await newUser.save()
         session.flash("message",{type: "positive", message:"ลงทะเบียนสำเร็จ กรุณา login เพื่อเข้าสู่ระบบ"})
