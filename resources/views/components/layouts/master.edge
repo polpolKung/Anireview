@@ -11,11 +11,12 @@
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
     <script src="/semantic/semantic.min.js"></script>
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <style>
         @if($slots.style) 
             {{{ await $slots.style()}}}
         @end
-    </style>
+    </style> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-screen flex flex-col">
@@ -52,6 +53,24 @@
         $('.ui.dropdown').dropdown();
         $('.message .close').on('click', function(){
             $(this).closest('.message').transition('fade');
+        });
+
+        $('.delbutton').click(function() {
+            const animeId = $(this).data('id');
+
+            Swal.fire({
+            title: 'ลบ post นี้?',
+            text: "ลบแล้วจะไม่สามารถกู้คืนได้!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่, ลบเลย!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/anime/delete/${animeId}`;
+            }
+            });
         });
     </script>
 </body>

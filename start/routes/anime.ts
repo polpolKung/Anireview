@@ -8,8 +8,12 @@ router.get('/', ({response}: HttpContext) => {
 })
 
 router.group(()=> {
-    router.get('/anime/form', [AnimeController,'create']).as('anime.create')
-    router.post('/anime/form', [AnimeController,'store']).as('anime.store')
+    router.get('/anime/create', [AnimeController,'create']).as('anime.create')
+    router.post('/anime/create', [AnimeController,'store']).as('anime.store')
+    router.get('/anime/edit/:id', [AnimeController,'edit']).as('anime.edit')
+    router.post('/anime/update/:id', [AnimeController,'update']).as('anime.update')
+    router.get('/anime/delete/:id', [AnimeController,'destroy']).as('anime.delete')
+
 }).use(middleware.auth())
 
 router.group(()=> {

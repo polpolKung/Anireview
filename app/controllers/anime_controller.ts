@@ -1,9 +1,10 @@
 import Anime from '#models/anime'
 import { createAnimeValidator } from '#validators/anime';
-import { Application } from '@adonisjs/core/app';
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon';
 import path from 'path';
+import fs from 'fs/promises';
+
 
 export default class AnimeController {
     async index({view}: HttpContext) {
@@ -40,7 +41,7 @@ export default class AnimeController {
 
     async store({session, request, response}: HttpContext) {
         
-        const payload = await request.validateUsing(createAnimeValidator)
+        const payload = await request.validateUsing(createAnimeValidator(true))
 
         const newAnime = new Anime() 
         newAnime.nameEN = payload.nameEN
@@ -61,7 +62,6 @@ export default class AnimeController {
         if (picture) {
             const dir = process.cwd()
             const publicDir = path.join(dir, 'public', 'images', 'poster')
-            console.log('publicDir', publicDir);
 
             const fileName = `${Date.now()}-${picture.clientName}.png`
 
@@ -80,5 +80,75 @@ export default class AnimeController {
         response.redirect().toRoute('anime.home')
 
 
+    }
+
+    async edit({params, view}: HttpContext) {
+        const id = params.id
+        const anime = await Anime.find(id)
+
+        // await bouncer.with('PostPolicy').authorize('edit',post!)
+        return view.render('anime_form', {anime})
+    }
+
+    async update({params, request, response, session}: HttpContext) {      
+        const id = params.id
+        const anime = await Anime.find(id)
+
+
+        // await bouncer.with('PostPolicy').authorize('update',post!)
+
+        const payload = await request.validateUsing(createAnimeValidator(false))
+        anime!.nameEN = payload.nameEN
+        anime!.nameTH = payload.nameTH
+        anime!.scoreAdmin = payload.score
+        anime!.publishDate =  DateTime.fromISO(payload.publishDate)
+        anime!.urlTrailer = payload.urlTrailer
+        anime!.reviewNoSpoiler = payload.reviewNoSpoiler
+        anime!.reviewSpoiler = payload.reviewSpoiler
+        anime!.description = payload.description
+        
+        const picture = request.file('picture', {
+            extnames: ['jpg', 'jpeg', 'png'],
+        })
+
+        if (picture) {
+            const dir = process.cwd();
+            const publicDir = path.join(dir, 'public', 'images', 'poster');
+        
+            if (anime!.picturePath) {
+                const oldFilePath = path.join(dir, 'public', anime!.picturePath);
+                try {
+                    await fs.access(oldFilePath);
+                    await fs.unlink(oldFilePath);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        
+            const fileName = `${Date.now()}-${picture.clientName}`;
+
+            await picture.move(publicDir, {
+                name: fileName,
+                overwrite: true,
+            });
+        
+            anime!.picturePath = `/images/poster/${fileName}`;
+        }
+
+        await anime?.save()
+        
+        session.flash("message", {type: "positive", message: "อัพเดทข้อมูลสำเร็จ"})
+        response.redirect().toRoute('anime.show',[id])
+    }
+
+    async destroy({params, response}: HttpContext) {
+        const id = params.id
+        const anime = await Anime.find(id)   
+                                
+        // await bouncer.with('PostPolicy').authorize('delete',post!)
+
+        await anime?.delete()
+
+        response.redirect().toRoute('anime.home')
     }
 }

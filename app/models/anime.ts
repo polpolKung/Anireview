@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, computed, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Comment from './comment.js'
 
@@ -36,6 +36,11 @@ export default class Anime extends BaseModel {
 
   @column.dateTime({ autoCreate: false })
   declare publishDate: DateTime | null
+
+  @computed()
+  get publishOn(){
+    return this.publishDate?.toFormat("yyyy-MM-dd\'T\'HH:mm")
+  }
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

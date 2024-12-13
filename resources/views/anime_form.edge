@@ -3,12 +3,12 @@
 <div class="ui container mt-5">
   <h2 class="ui header">เพิ่มอนิเมะใหม่</h2>
 
-  <form action="{{ route('anime.store') }}" method="POST" enctype="multipart/form-data" class="ui form bg-white p-5">
+  <form action="{{anime? route('anime.update',[anime.id]) : route('anime.store') }}" method="POST" enctype="multipart/form-data" class="ui form bg-white p-5">
     {{ csrfField() }}
 
     <div class="ui grid ">
       <div class="eight wide column">
-        @!input({label: 'ชื่ออนิเมะ (อังกฤษ)', name:'nameEN', placeholder: "ใส่ชื่ออนิเมะภาษาอังกฤษ", value: old('nameEN') || ''})
+        @!input({label: 'ชื่ออนิเมะ (อังกฤษ)', name:'nameEN', placeholder: "ใส่ชื่ออนิเมะภาษาอังกฤษ", value: old('nameEN') || (anime?.nameEN || '')})
         @inputError('nameEN')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -17,7 +17,7 @@
       </div>
       
       <div class="eight wide column">
-        @!input({label: 'ชื่ออนิเมะ (ไทย)', name:'nameTH', placeholder: "ใส่ชื่ออนิเมะภาษาไทย", value: old('nameTH') || ''})
+        @!input({label: 'ชื่ออนิเมะ (ไทย)', name:'nameTH', placeholder: "ใส่ชื่ออนิเมะภาษาไทย", value: old('nameTH') || (anime?.nameTH || '')})
         @inputError('nameTH')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="eight wide column">
-        @!input({label: 'คะแนน', name:'score', placeholder: "ใส่คะแนนสำหรับเรื่องนี้", type:"number", min:"0", max:"10", step:"0.1" , value: old('score') || ''})
+        @!input({label: 'คะแนน', name:'score', placeholder: "ใส่คะแนนสำหรับเรื่องนี้", type:"number", min:"0", max:"10", step:"0.01" , value: old('score') || (anime?.scoreAdmin || '')})
         @inputError('score')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -44,7 +44,7 @@
       </div>
       
       <div class="eight wide column">
-        @!input({label: 'วันที่จะโพสต์', name:'publishDate', type:"datetime-local", value: old('publishDate') || ''})
+        @!input({label: 'วันที่จะโพสต์', name:'publishDate', type:"datetime-local", value: old('publishDate') || (anime?.publishOn || '')})
         @inputError('publishDate')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -53,7 +53,7 @@
       </div>
 
             <div class="eight wide column">
-        @!input({label: 'ลิ้งตัวอย่าง', name:'urlTrailer', type:"url", placeholder: "เช่น https://youtu.be/Slz_rahWp6Y", value: old('urlTrailer') || ''})
+        @!input({label: 'ลิ้งตัวอย่าง', name:'urlTrailer', type:"url", placeholder: "เช่น https://youtu.be/Slz_rahWp6Y", value: old('urlTrailer') || (anime?.urlTrailer || '')})
         @inputError('urlTrailer')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -66,7 +66,7 @@
     <p class="ui small text">*หมายเหตุ วันที่จะโพสต์ หากยังไม่ถึงวันที่กำหนดจะไม่แสดงให้ user เห็น</p>
 
     <div class="field">
-      @!textarea({label: 'รีวิว (ไม่มีสปอยล์)', name:'reviewNoSpoiler', placeholder: "รีวิวแบบไม่มีสปอยล์", rows: "4", value: old('reviewNoSpoiler') || ''})
+      @!textarea({label: 'รีวิว (ไม่มีสปอยล์)', name:'reviewNoSpoiler', placeholder: "รีวิวแบบไม่มีสปอยล์", rows: "4", value: old('reviewNoSpoiler') || (anime?.reviewNoSpoiler || '')})
       @inputError('reviewNoSpoiler')
           @each(message in $messages)
               <div class="ui negative message">{{ message }}</div>
@@ -75,7 +75,7 @@
     </div>
 
     <div class="field">
-      @!textarea({label: 'รีวิว (สปอยล์)', name:'reviewSpoiler', placeholder: "รีวิวแบบมีสปอยล์", rows: "4",value: old('reviewSpoiler') || ''})
+      @!textarea({label: 'รีวิว (สปอยล์)', name:'reviewSpoiler', placeholder: "รีวิวแบบมีสปอยล์", rows: "4",value: old('reviewSpoiler') || (anime?.reviewSpoiler || '')})
       @inputError('reviewSpoiler')
           @each(message in $messages)
               <div class="ui negative message">{{ message }}</div>
@@ -84,16 +84,17 @@
     </div>
 
     <div class="field">
-      @!textarea({label: 'คำอธิบายเพิ่มเติม', name:'description', placeholder: "คำอธิบายเพิ่มเติมเกี่ยวกับอนิเมะ", rows: "4", value: old('description') || ''})
+      @!textarea({label: 'คำอธิบายเพิ่มเติม', name:'description', placeholder: "คำอธิบายเพิ่มเติมเกี่ยวกับอนิเมะ", rows: "4", value: old('description') || (anime?.description || '')})
       @inputError('description')
           @each(message in $messages)
               <div class="ui negative message">{{ message }}</div>
           @end
       @end
     </div>
-
-    @!input({name:'submit', type: 'submit', value: 'Submit'}) 
+    <div class="ui buttons space-x-4">
+      @!input({name:'submit', type: 'submit', value: anime? 'Edit': 'Submit'})
+      @!button({action: route('anime.show',[anime.id]), label: 'Back'}) 
+    </div>
   </form>
 </div>
-
 @end
