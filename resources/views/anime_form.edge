@@ -53,7 +53,7 @@
       </div>
 
             <div class="eight wide column">
-        @!input({label: 'ลิ้งตัวอย่าง', name:'urlTrailer', type:"url", placeholder: "เช่น https://youtu.be/Slz_rahWp6Y", value: old('urlTrailer') || (anime?.urlTrailer || '')})
+        @!input({label: 'ลิ้งตัวอย่าง', name:'urlTrailer', type:"url", placeholder: "สามารถใช้ได้เฉพาะลิ้งค์จาก youtube เท่านั้น เช่น https://youtu.be/Slz_rahWp6Y", value: old('urlTrailer') || (anime?.urlTrailer || '')})
         @inputError('urlTrailer')
             @each(message in $messages)
                 <div class="ui negative message">{{ message }}</div>
@@ -93,9 +93,7 @@
     </div>
     <div class="ui buttons space-x-4">
       @!input({name:'submit', type: 'submit', value: anime? 'Edit': 'Submit'})
-      @if(anime)
-        @!button({action: route('anime.show',[anime.id]), label: 'Back'}) 
-      @end
+      @!button({action: anime? route('anime.show',[anime.id]) : route('anime.home'), label: 'Back'}) 
     </div>
   </form>
 </div>

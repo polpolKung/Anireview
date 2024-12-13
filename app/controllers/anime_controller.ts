@@ -48,7 +48,7 @@ export default class AnimeController {
         newAnime.nameTH = payload.nameTH
         newAnime.scoreAdmin = payload.score
         newAnime.publishDate =  DateTime.fromISO(payload.publishDate)
-        newAnime.urlTrailer = payload.urlTrailer
+        newAnime.urlTrailer = this.convertYouTubeLinkToEmbed(payload.urlTrailer)
         newAnime.reviewNoSpoiler = payload.reviewNoSpoiler
         newAnime.reviewSpoiler = payload.reviewSpoiler
         newAnime.description = payload.description
@@ -102,7 +102,7 @@ export default class AnimeController {
         anime!.nameTH = payload.nameTH
         anime!.scoreAdmin = payload.score
         anime!.publishDate =  DateTime.fromISO(payload.publishDate)
-        anime!.urlTrailer = payload.urlTrailer
+        anime!.urlTrailer = this.convertYouTubeLinkToEmbed(payload.urlTrailer)
         anime!.reviewNoSpoiler = payload.reviewNoSpoiler
         anime!.reviewSpoiler = payload.reviewSpoiler
         anime!.description = payload.description
@@ -152,4 +152,23 @@ export default class AnimeController {
 
         response.redirect().toRoute('anime.home')
     }
+
+    convertYouTubeLinkToEmbed(url: string): string {
+        const youtubeRegexes = [
+            /https:\/\/youtu\.be\/([a-zA-Z0-9_-]+)/,               
+            /https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+            /https:\/\/www\.youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,
+            /https:\/\/www\.youtube\.com\/v\/([a-zA-Z0-9_-]+)/ 
+        ];
+        
+        for (const regex of youtubeRegexes) {
+            const match = url.match(regex);
+            if (match && match[1]) {
+            return `https://www.youtube.com/embed/${match[1]}`;
+            }
+        }
+        
+        return url;
+    }
+
 }

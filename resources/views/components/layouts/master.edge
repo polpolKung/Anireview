@@ -51,6 +51,12 @@
 
     <script>
         $('.ui.dropdown').dropdown();
+
+        if ($('.message').length) {
+            setTimeout(function() {
+                $('.message').transition('fade');
+            }, 3000);
+        }
         $('.message .close').on('click', function(){
             $(this).closest('.message').transition('fade');
         });
