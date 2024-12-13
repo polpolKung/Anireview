@@ -93,7 +93,9 @@
     </div>
     <div class="ui buttons space-x-4">
       @!input({name:'submit', type: 'submit', value: anime? 'Edit': 'Submit'})
-      @!button({action: route('anime.show',[anime.id]), label: 'Back'}) 
+      @if(anime)
+        @!button({action: route('anime.show',[anime.id]), label: 'Back'}) 
+      @end
     </div>
   </form>
 </div>

@@ -141,13 +141,14 @@ export default class AnimeController {
         response.redirect().toRoute('anime.show',[id])
     }
 
-    async destroy({params, response}: HttpContext) {
+    async destroy({params, response, session}: HttpContext) {
         const id = params.id
         const anime = await Anime.find(id)   
                                 
         // await bouncer.with('PostPolicy').authorize('delete',post!)
 
         await anime?.delete()
+        session.flash("message", {type: "positive", message: "ลบข้อมูลสำเร็จ"})
 
         response.redirect().toRoute('anime.home')
     }
