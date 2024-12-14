@@ -77,8 +77,6 @@ export default class CommentsController {
             .andWhereNotNull('score')
             .avg('score as avg')
             .first();
-
-        console.log('count',count);
         
         anime.scoreUser = count?.$extras?.avg || null;
         await anime.save();

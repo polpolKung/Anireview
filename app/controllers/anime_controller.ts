@@ -9,11 +9,17 @@ import fs from 'fs/promises';
 export default class AnimeController {
     async index({view}: HttpContext) {
         
-        const animeList = await Anime.query();
+        const animeList = await Anime.query().orderBy('publish_date','desc');
         const maxLength = 500;
         animeList.forEach(anime => {
             if (anime.reviewNoSpoiler.length > maxLength) {
                 anime.reviewNoSpoiler = anime.reviewNoSpoiler.substring(0, maxLength) + '...';
+            }
+            if(anime?.scoreAdmin){
+                anime.scoreAdmin = parseFloat(anime.scoreAdmin.toString())
+            }
+            if(anime?.scoreUser){
+                anime.scoreUser = parseFloat(anime.scoreUser.toString())
             }
         });
 

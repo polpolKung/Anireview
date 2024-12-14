@@ -42,6 +42,12 @@ export default class Anime extends BaseModel {
     return this.publishDate?.toFormat("yyyy-MM-dd\'T\'HH:mm")
   }
 
+  @computed()
+  get publishOnFormat(){
+    return this.publishDate?.toFormat('cccc, dd LLL yyyy HH:mm');
+
+  }
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
