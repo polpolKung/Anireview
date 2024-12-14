@@ -30,7 +30,12 @@ export default class AnimeController {
                                     });
                                     })
                                     .first();
-
+        if(anime?.scoreAdmin){
+            anime.scoreAdmin = parseFloat(anime.scoreAdmin.toString())
+        }
+        if(anime?.scoreUser){
+            anime.scoreUser = parseFloat(anime.scoreUser.toString())
+        }
         
         return view.render('anime_detail', {anime})
     }

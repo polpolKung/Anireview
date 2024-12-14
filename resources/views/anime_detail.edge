@@ -48,12 +48,14 @@
         <span class="text-yellow-400 text-3xl">{{ anime.scoreAdmin }}/10</span>
       </div>
     </div>
+    @if(anime.scoreUser)
     <div class="flex flex-col items-end">
       <span class="p-1 bg-gray-900 rounded-t-xl text-white">user</span>
       <div class="font-bold p-2 bg-gray-900 rounded-s-xl rounded-b-xl text-center mb-2">
         <span class="text-yellow-400 text-3xl">{{ anime.scoreUser }}/10</span>
       </div>
     </div>
+    @end
   </div>
 </div>
   
@@ -68,22 +70,19 @@
       <div class="eight wide column">
         <h2 class="ui dividing header">ความคิดเห็น</h2>
         
-        <form action="/submit-comment" method="POST" class="ui reply form">
+        <form action="{{ auth.isAuthenticated ? ( comment?  route('comments.update', {aid: anime.id, cid: comment.id}) : route('comments.create', {uid: auth.user.id, aid: anime.id})) : route('login') }}" method="{{ auth.isAuthenticated ? 'POST' : 'GET' }}" class="ui reply form">
           {{ csrfField() }}
           <div class="fields">
             <div class="eleven wide field">
-              <textarea rows="2" name="comment" placeholder="แสดงความคิดเห็นของคุณ..."></textarea>
+              @!textarea({rows:"2", name:"comment", placeholder:"แสดงความคิดเห็นของคุณ...", value: old('comment') || (comment?.comment || '')})
+              @inputError('comment')
+                @each(message in $messages)
+                    <div class="ui negative message">{{ message }}</div>
+                @end
+              @end
             </div>
             <div class="five wide field">
-              <input 
-                type="number" 
-                name="score" 
-                step="0.01" 
-                min="0" 
-                max="10" 
-                placeholder="คะแนน (เต็ม 10)" 
-                class="ui input"
-              >
+              @!input({type:"number", name:"score", step:"0.01", min:"0", max:"10", placeholder:"คะแนน (เต็ม 10)", value: old('score') || (comment?.score || '')})
             </div>
           </div>
           <button type="submit" class="ui blue labeled submit icon button">
@@ -91,22 +90,44 @@
           </button>
         </form>
 
-        <div class="ui comments h-56 overflow-y-auto border p-3">
+        <div class="ui comments overflow-y-auto h-60 border p-3">
           @each(comment in anime.$preloaded.comments)
-          <div class="comment">
-            <div class="content">
+          <div class="comment flex justify-between items-start relative">
+            <div>
               <span class="author">{{comment.$preloaded.user.fullName}}</span>
               <div class="metadata">
                 <span class="date">{{comment.postedOn}}</span>
+                @if(comment.score)
                 <span class="score">คะแนน: {{comment.score}}</span>
+                @end
               </div>
               <div class="text">
                 {{comment.comment}}
               </div>
             </div>
+        
+            @if(auth.user?.id === comment.userId)
+            <div class="relative">
+              <div class="ui simple dropdown icon cursor-pointer">
+                <i class="ellipsis vertical icon"></i>
+                <div class="menu left absolute right-0 mt-2 z-10 bg-white border rounded shadow-lg">
+                  <a href="{{ route('comments.edit', {aid: anime.id, cid: comment.id}) }}" class="item px-4 py-2 hover:bg-gray-100">
+                    <i class="edit icon"></i> แก้ไข
+                  </a>
+                  <a href="#" class="item px-4 py-2 hover:bg-gray-100 delcomment"  
+                  data-aid="{{ anime.id }}" 
+                  data-cid="{{ comment.id }}"
+                  >
+                    <i class="trash icon"></i> ลบ
+                  </a>
+                </div>
+              </div>
+            </div>
+            @end
           </div>
           @end
         </div>
+
       </div>
     </div>
     
@@ -128,7 +149,6 @@
 </div>
 
 <script>
-  $(document).ready(function() {
     $('#toggleReview').click(function() {
       var $spoilerContent = $('#spoilerContent');
       var $button = $('#toggleReview');
@@ -141,6 +161,27 @@
         $button.text('อ่าน!!!');
       }
     });
-  });
+
+    $('.delcomment').on('click', function (e) {
+      e.preventDefault();
+      const animeId = $(this).data('aid');
+      const commentId = $(this).data('cid');
+      const deleteUrl = `/comments/${animeId}/delete/${commentId}`; 
+
+      Swal.fire({
+        title: 'ต้องการลบความคิดเห็นนี้?',
+        text: 'ความคิดเห็นนี้จะถูกลบและไม่สามารถกู้คืนได้!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่, ลบเลย!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = deleteUrl;
+        }
+      });
+    });
 </script>
 @end

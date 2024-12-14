@@ -20,10 +20,10 @@ export default class Anime extends BaseModel {
   declare reviewSpoiler: string
 
   @column()
-  declare scoreAdmin: number
+  declare scoreAdmin: number 
 
   @column()
-  declare scoreUser: number
+  declare scoreUser: number | null
 
   @column()
   declare picturePath: string

@@ -5,7 +5,9 @@
 --}}
 
 <div class="field">
-    <label for="{{name}}">{{label}}</label>
+@if(label)
+    <label for="{{name}}">{{label}}</label>    
+@end
 <textarea id="{{name}}" {{ $props.except(['label', 'value']).toAttrs() }}>
 @if(value) 
 {{ value }}

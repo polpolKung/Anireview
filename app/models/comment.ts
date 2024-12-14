@@ -18,7 +18,7 @@ export default class Comment extends BaseModel {
   declare comment: string
 
   @column()
-  declare score: number
+  declare score: number | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

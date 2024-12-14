@@ -2,9 +2,10 @@ import router from '@adonisjs/core/services/router'
 import CommentsController from '#controllers/comments_controller'
 import { middleware } from '#start/kernel'
 
+router.group(()=> {
+    router.post('/comments/:uid/create/:aid', [CommentsController, 'store']).as('comments.create')
+    router.get('/comments/:aid/edit/:cid', [CommentsController, 'edit']).as('comments.edit')
+    router.post('/comments/:aid/update/:cid', [CommentsController, 'update']).as('comments.update')
+    router.get('/comments/:aid/delete/:cid', [CommentsController, 'destroy']).as('comments.delete')
 
-// router.group(()=> {
-//     router.get('comments/:postid', [CommentsController, 'index']).as('comments.index')
-//     router.post('comments/:postid', [CommentsController, 'store']).as('comments.store')
-// }).use(middleware.auth())
-
+}).use(middleware.auth())
