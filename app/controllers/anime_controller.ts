@@ -4,6 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon';
 import path from 'path';
 import fs from 'fs/promises';
+import CommentsController from './comments_controller.js';
 
 
 export default class AnimeController {
@@ -60,6 +61,8 @@ export default class AnimeController {
         if(anime?.scoreUser){
             anime.scoreUser = parseFloat(anime.scoreUser.toString())
         }
+        const commentsController = new CommentsController()
+        await commentsController.updateAnimeScore(id)
         
         return view.render('anime_detail', {anime})
     }

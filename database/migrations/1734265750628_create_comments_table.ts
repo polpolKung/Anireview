@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('anime_id').notNullable().unsigned().references('anime.id')
       table.integer('user_id').notNullable().unsigned().references('users.id')
       table.text('comment').notNullable()
-      table.decimal('score').notNullable().defaultTo(0)
+      table.decimal('score').nullable()
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })
