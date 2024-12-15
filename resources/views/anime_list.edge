@@ -25,50 +25,56 @@
 
     <div class="ui container mt-5">
         <h1 class="ui header">อนิเมะแนะนำ</h1>
-        @each(anime in animeList)
-        <div class="ui divided items segment {{ (new Date(anime.publishOnFormat) > new Date()) ? 'grey' : 'blue' }}">
-            <div class="item">
-                <div class="ui small image">
-                    <a href="{{route('anime.show', [anime.id])}}">
-                        <img src="{{ anime.picturePath }}" alt="Re:zero">
-                    </a>
-                </div>
-                <div class="content">
-                    @if(auth.isAuthenticated)
-                        @can('AnimePolicy.edit') 
-                        <div class="absolute top-0 right-0 mt-3 mr-3">
-                            <a class="ui icon button blue" href="{{route('anime.edit', [anime.id])}}">
-                                <i class="edit icon"></i>
-                            </a>
-                            <a class="ui icon button red delbutton" data-id="{{anime.id}}">
-                                <i class="trash icon"></i>
-                            </a>
+        @if(anime)
+            @each(anime in animeList)
+            <div class="ui divided items segment {{ (new Date(anime.publishOnFormat) > new Date()) ? 'grey' : 'blue' }}">
+                <div class="item">
+                    <div class="ui small image">
+                        <a href="{{route('anime.show', [anime.id])}}">
+                            <img src="{{ anime.picturePath }}" alt="Re:zero">
+                        </a>
+                    </div>
+                    <div class="content">
+                        @if(auth.isAuthenticated)
+                            @can('AnimePolicy.edit') 
+                            <div class="absolute top-0 right-0 mt-3 mr-3">
+                                <a class="ui icon button blue" href="{{route('anime.edit', [anime.id])}}">
+                                    <i class="edit icon"></i>
+                                </a>
+                                <a class="ui icon button red delbutton" data-id="{{anime.id}}">
+                                    <i class="trash icon"></i>
+                                </a>
+                            </div>
+                            @end
+                        @end
+                        <h2 class="header w-10/12">
+                            <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameEN }}</a>
+                        </h2>
+                        <br/>
+                        <span class="meta">
+                            <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameTH }}</a>
+                        </span>
+                        
+                        <div class="extra flex justify-between">
+                            <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreAdmin }}/10</b> admin</span>
+                            @if(anime.scoreUser)
+                            <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreUser }}/10</b> users</span>
+                            @end
                         </div>
-                        @end
-                    @end
-                    <h2 class="header w-10/12">
-                        <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameEN }}</a>
-                    </h2>
-                    <br/>
-                    <span class="meta">
-                        <a href="{{route('anime.show', [anime.id])}}">{{ anime.nameTH }}</a>
-                    </span>
-                    
-                    <div class="extra flex justify-between">
-                        <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreAdmin }}/10</b> admin</span>
-                        @if(anime.scoreUser)
-                        <span><b class="bg-black p-1 rounded-lg text-yellow-300">{{ anime.scoreUser }}/10</b> users</span>
-                        @end
-                    </div>
-                    <div class="mt-2">
-                        <span class="text-sm {{ (new Date(anime.publishOnFormat) > new Date()) ? 'text-blue-500' : 'text-gray-700' }} ">{{ (new Date(anime.publishOnFormat) > new Date()) ? 'จะเผยแพร่วันที่' : 'เผยแพร่เมื่อ' }}: {{ anime.publishOnFormat }}</span>
-                    </div>
-                    <div class="description">
-                        <p>{{ anime.reviewNoSpoiler }} <a href="{{route('anime.show', [anime.id])}}" class="text-blue-700">อ่านต่อ</a></p>
+                        <div class="mt-2">
+                            <span class="text-sm {{ (new Date(anime.publishOnFormat) > new Date()) ? 'text-blue-500' : 'text-gray-700' }} ">{{ (new Date(anime.publishOnFormat) > new Date()) ? 'จะเผยแพร่วันที่' : 'เผยแพร่เมื่อ' }}: {{ anime.publishOnFormat }}</span>
+                        </div>
+                        <div class="description">
+                            <p>{{ anime.reviewNoSpoiler }} <a href="{{route('anime.show', [anime.id])}}" class="text-blue-700">อ่านต่อ</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            @end
+        @else
+            <div class="text-center py-4">
+                <p class="text-gray-500">ไม่มีอนิเมะ</p>
+            </div>
         @end
     </div>
 @end
