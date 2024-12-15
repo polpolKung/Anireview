@@ -9,8 +9,11 @@ SELECT * FROM anireview.anime;
 SELECT * FROM anireview.users;
 SELECT * FROM anireview.comments;
 
+ALTER TABLE anireview.anime
+DROP COLUMN score_user;
+
 update anime
-set description = 'yoooo', urlTrailer = 'https://www.youtube.com/embed/Slz_rahWp6Y'
+set description = 'yoooo', url_trailer = 'https://www.youtube.com/embed/Slz_rahWp6Y';
 
 
 

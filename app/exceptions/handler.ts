@@ -1,6 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import type { StatusPageRange, StatusPageRenderer } from '@adonisjs/core/types/http'
+import { errors } from '@adonisjs/bouncer'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -34,7 +35,14 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
-    return super.handle(error, ctx)
+    if(error instanceof errors.E_AUTHORIZATION_FAILURE){ 
+        ctx.session.flash('message',{type: 'negative', 
+        message: 'คุณไม่มีสิทธิ์ในการดำเนินการนี้!'}) 
+        
+        ctx.response.redirect().toRoute('anime.home') 
+      return;
+      } 
+       return super.handle(error, ctx) 
   }
 
   /**

@@ -22,7 +22,7 @@
 <body class="h-screen flex flex-col">
     @flashMessage("message")
     <div class="fixed top-24 w-full z-50">
-        <div class="ui {{$message.type}} message left-1/2 -translate-x-1/2 text-center max-w-lg">
+        <div id="message" class="ui {{$message.type}} message left-1/2 -translate-x-1/2 text-center max-w-lg">
             <i class="close icon"></i>
             {{$message.message}}
         </div>
@@ -52,9 +52,9 @@
     <script>
         $('.ui.dropdown').dropdown();
 
-        if ($('.message .left-1/2').length) {
+        if ($('#message').length) {
             setTimeout(function() {
-                $('.message').transition('fade');
+                $('#message').transition('fade');
             }, 3000);
         }
         $('.message .close').on('click', function(){

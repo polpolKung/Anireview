@@ -7,9 +7,15 @@ import fs from 'fs/promises';
 
 
 export default class AnimeController {
-    async index({view}: HttpContext) {
-        
-        const animeList = await Anime.query().orderBy('publish_date','desc');
+    async index({view, bouncer}: HttpContext) {
+        let animeListQuery = Anime.query().orderBy('publish_date', 'desc');
+
+        if (await bouncer.with('AnimePolicy').denies('viewList')) {
+            animeListQuery = animeListQuery.where('publish_date', '<=', new Date());
+        }
+
+        const animeList = await animeListQuery;
+
         const maxLength = 500;
         animeList.forEach(anime => {
             if (anime.reviewNoSpoiler.length > maxLength) {
@@ -26,16 +32,28 @@ export default class AnimeController {
         return view.render('anime_list', {animeList})
     }
 
-    async show({view, params}: HttpContext) {
+    async show({view, params, bouncer, session, response}: HttpContext) {
         const id = params.id
-        const anime = await Anime.query()
-                                    .where('id', id)
-                                    .preload('comments', (commentQuery) => {
+        const animeQuery = Anime.query()
+                                .where('id', id)
+                                .preload('comments', (commentQuery) => {
                                     commentQuery.preload('user', (userQuery) => {
                                         userQuery.select('fullName');
                                     });
-                                    })
-                                    .first();
+                                });
+
+        if (await bouncer.with('AnimePolicy').denies('view')) {
+            animeQuery.where('publish_date', '<=', new Date());
+        }
+
+        const anime = await animeQuery.first();
+
+        if (!anime) {
+            session.flash("message", {type: "negative", message: "คุณไม่มีสิทธิ์เข้าถึงหน้านี้ หรือ หน้านี้ไม่มีอยู่จริง"})
+            response.redirect().toRoute('anime.home')
+            return;
+        }
+
         if(anime?.scoreAdmin){
             anime.scoreAdmin = parseFloat(anime.scoreAdmin.toString())
         }
@@ -46,12 +64,14 @@ export default class AnimeController {
         return view.render('anime_detail', {anime})
     }
 
-    async create({view}: HttpContext) {       
+    async create({view, bouncer}: HttpContext) {
+        await bouncer.with('AnimePolicy').authorize('create')       
         return view.render('anime_form')
     }
 
-    async store({session, request, response}: HttpContext) {
-        
+    async store({session, request, response, bouncer}: HttpContext) {
+
+        await bouncer.with('AnimePolicy').authorize('create')       
         const payload = await request.validateUsing(createAnimeValidator(true))
 
         const newAnime = new Anime() 
@@ -93,20 +113,18 @@ export default class AnimeController {
 
     }
 
-    async edit({params, view}: HttpContext) {
+    async edit({params, view, bouncer}: HttpContext) {
+        await bouncer.with('AnimePolicy').authorize('edit')       
+
         const id = params.id
         const anime = await Anime.find(id)
-
-        // await bouncer.with('PostPolicy').authorize('edit',post!)
         return view.render('anime_form', {anime})
     }
 
-    async update({params, request, response, session}: HttpContext) {      
+    async update({params, request, response, session, bouncer}: HttpContext) { 
+        await bouncer.with('AnimePolicy').authorize('edit')            
         const id = params.id
         const anime = await Anime.find(id)
-
-
-        // await bouncer.with('PostPolicy').authorize('update',post!)
 
         const payload = await request.validateUsing(createAnimeValidator(false))
         anime!.nameEN = payload.nameEN
@@ -152,12 +170,12 @@ export default class AnimeController {
         response.redirect().toRoute('anime.show',[id])
     }
 
-    async destroy({params, response, session}: HttpContext) {
+    async destroy({params, response, session, bouncer}: HttpContext) {
+        await bouncer.with('AnimePolicy').authorize('delete')            
+
         const id = params.id
         const anime = await Anime.find(id)   
                                 
-        // await bouncer.with('PostPolicy').authorize('delete',post!)
-
         await anime?.delete()
         session.flash("message", {type: "positive", message: "ลบข้อมูลสำเร็จ"})
 

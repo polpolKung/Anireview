@@ -33,14 +33,16 @@
 
   <div class="absolute top-0 right-0 mt-3 mr-3 flex flex-col items-end space-y-4">
     @if(auth.isAuthenticated) 
-    <div class="lex flex-col items-end">
-      <a class="ui icon button blue" href="{{route('anime.edit', [anime.id])}}">
-          <i class="edit icon"></i>
-      </a>
-      <a class="ui icon button red delbutton" data-id="{{anime.id}}">
-          <i class="trash icon"></i>
-      </a>
-    </div>
+      @can('AnimePolicy.edit') 
+      <div class="lex flex-col items-end">
+        <a class="ui icon button blue" href="{{route('anime.edit', [anime.id])}}">
+            <i class="edit icon"></i>
+        </a>
+        <a class="ui icon button red delbutton" data-id="{{anime.id}}">
+            <i class="trash icon"></i>
+        </a>
+      </div>
+      @end
     @end
     <div class="flex flex-col items-end">
       <span class="p-1 bg-gray-900 rounded-t-xl text-white">admin</span>
@@ -91,42 +93,49 @@
         </form>
 
         <div class="ui comments overflow-y-auto h-60 border p-3">
-          @each(comment in anime.$preloaded.comments)
-          <div class="comment flex justify-between items-start relative">
-            <div>
-              <span class="author">{{comment.$preloaded.user.fullName}}</span>
-              <div class="metadata">
-                <span class="date">{{comment.postedOn}}</span>
-                @if(comment.score)
-                <span class="score">คะแนน: {{comment.score}}</span>
-                @end
+          @if(anime.$preloaded.comments.length > 0)
+              @each(comment in anime.$preloaded.comments)
+              <div class="comment flex justify-between items-start relative">
+                  <div>
+                      <span class="author">{{comment.$preloaded.user.fullName}}</span>
+                      <div class="metadata">
+                          <span class="date">{{comment.postedOn}}</span>
+                          @if(comment.score)
+                          <span class="score">คะแนน: {{comment.score}}</span>
+                          @end
+                      </div>
+                      <div class="text">
+                          {{comment.comment}}
+                      </div>
+                  </div>
+      
+                  @if( auth.user?.role !== 'ADMIN' ? auth.user?.id === comment.userId : true)
+                  <div class="relative">
+                      <div class="ui simple dropdown icon cursor-pointer">
+                          <i class="ellipsis vertical icon"></i>
+                          <div class="menu left absolute right-0 mt-2 z-10 bg-white border rounded shadow-lg">
+                              <a href="{{ route('comments.edit', {aid: anime.id, cid: comment.id}) }}" class="item px-4 py-2 hover:bg-gray-100">
+                                  <i class="edit icon"></i> แก้ไข
+                              </a>
+                              <a href="#" class="item px-4 py-2 hover:bg-gray-100 delcomment"  
+                              data-aid="{{ anime.id }}" 
+                              data-cid="{{ comment.id }}"
+                              >
+                                  <i class="trash icon"></i> ลบ
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  @end
               </div>
-              <div class="text">
-                {{comment.comment}}
+              @end
+          @else
+              <div class="no-comments text-center py-4">
+                  <p class="text-gray-500">ไม่มีความคิดเห็น</p>
               </div>
-            </div>
-        
-            @if(auth.user?.id === comment.userId)
-            <div class="relative">
-              <div class="ui simple dropdown icon cursor-pointer">
-                <i class="ellipsis vertical icon"></i>
-                <div class="menu left absolute right-0 mt-2 z-10 bg-white border rounded shadow-lg">
-                  <a href="{{ route('comments.edit', {aid: anime.id, cid: comment.id}) }}" class="item px-4 py-2 hover:bg-gray-100">
-                    <i class="edit icon"></i> แก้ไข
-                  </a>
-                  <a href="#" class="item px-4 py-2 hover:bg-gray-100 delcomment"  
-                  data-aid="{{ anime.id }}" 
-                  data-cid="{{ comment.id }}"
-                  >
-                    <i class="trash icon"></i> ลบ
-                  </a>
-                </div>
-              </div>
-            </div>
-            @end
-          </div>
           @end
-        </div>
+      </div>
+      
 
       </div>
     </div>
