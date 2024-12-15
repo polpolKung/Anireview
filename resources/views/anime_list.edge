@@ -25,7 +25,7 @@
 
     <div class="ui container mt-5">
         <h1 class="ui header">อนิเมะแนะนำ</h1>
-        @if(anime)
+        @if(animeList)
             @each(anime in animeList)
             <div class="ui divided items segment {{ (new Date(anime.publishOnFormat) > new Date()) ? 'grey' : 'blue' }}">
                 <div class="item">

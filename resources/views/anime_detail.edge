@@ -88,7 +88,7 @@
             </div>
           </div>
           <button type="submit" class="ui blue labeled submit icon button">
-            <i class="icon edit"></i> ส่งความคิดเห็น
+            <i class="icon edit"></i>  {{ anime.$preloaded.comments.length > 0 ? 'แก้ไขความคิดเห็น' : 'ส่งความคิดเห็น'}}
           </button>
         </form>
 

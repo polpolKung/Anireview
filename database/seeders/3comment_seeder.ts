@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
     await Comment.createMany([
       {
         animeId: 1,
-        userId: 1,
+        userId: 2,
         comment: 'สุดยอดมากครับ เนื้อเรื่องเข้มข้นมาก!',
         score: 9.5,
       },
@@ -42,13 +42,13 @@ export default class extends BaseSeeder {
       },
       {
         animeId: 3,
-        userId: 7,
+        userId: 2,
         comment: 'เรื่องนี้อบอุ่นหัวใจมาก ดูแล้วอมยิ้มตลอด!',
         score: 9.0,
       },
       {
         animeId: 3,
-        userId: 8,
+        userId: 4,
         comment: 'ตัวละครมีมิติ ชอบความสัมพันธ์ของฮอริกับมิยามูระมาก!',
         score: 9.5,
       }
