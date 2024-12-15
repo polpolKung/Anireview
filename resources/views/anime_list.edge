@@ -38,12 +38,8 @@
                         @if(auth.isAuthenticated)
                             @can('AnimePolicy.edit') 
                             <div class="absolute top-0 right-0 mt-3 mr-3">
-                                <a class="ui icon button blue" href="{{route('anime.edit', [anime.id])}}">
-                                    <i class="edit icon"></i>
-                                </a>
-                                <a class="ui icon button red delbutton" data-id="{{anime.id}}">
-                                    <i class="trash icon"></i>
-                                </a>
+                                @!editButton({action: route('anime.edit', [anime.id])})
+                                @!deleteButton({data: anime.id})
                             </div>
                             @end
                         @end

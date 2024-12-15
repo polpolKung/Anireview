@@ -148,13 +148,7 @@ export default class AnimeController {
             const publicDir = path.join(dir, 'public', 'images', 'poster');
         
             if (anime!.picturePath) {
-                const oldFilePath = path.join(dir, 'public', anime!.picturePath);
-                try {
-                    await fs.access(oldFilePath);
-                    await fs.unlink(oldFilePath);
-                } catch (error) {
-                    console.log(error);
-                }
+                await this.deletePicture(anime!.picturePath)
             }
         
             const fileName = `${Date.now()}-${picture.clientName}`;
@@ -179,6 +173,10 @@ export default class AnimeController {
         const id = params.id
         const anime = await Anime.find(id)   
                                 
+        if (anime!.picturePath) {
+           await this.deletePicture(anime!.picturePath)
+        }
+    
         await anime?.delete()
         session.flash("message", {type: "positive", message: "ลบข้อมูลสำเร็จ"})
 
@@ -201,6 +199,16 @@ export default class AnimeController {
         }
         
         return url;
+    }
+
+    async deletePicture(picturePath: string){
+        const oldFilePath = path.join(process.cwd(), 'public', picturePath);
+        try {
+            await fs.access(oldFilePath);
+            await fs.unlink(oldFilePath);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 }
