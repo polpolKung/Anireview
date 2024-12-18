@@ -12,9 +12,11 @@ SELECT * FROM anireview.comments;
 ALTER TABLE anireview.anime
 DROP COLUMN score_user;
 
+DROP table anime;
+
+
 update anime
 set description = 'yoooo', url_trailer = 'https://www.youtube.com/embed/Slz_rahWp6Y';
-
 
 
 INSERT INTO anime (

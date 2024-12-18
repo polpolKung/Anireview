@@ -37,5 +37,4 @@ export default class UsersController {
 
         response.redirect().toRoute('login')
     }
-
 }
